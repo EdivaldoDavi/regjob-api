@@ -46,7 +46,10 @@ public class CandidatoVagaResource {
 		return service.listar();
 	}
 	
-
+	 @RequestMapping("/login")
+	    public String home(){
+	        return "Hello World!";
+	    }
 	@GetMapping
 	
 	@RequestMapping("/pesquisar/vagaId/{vagaId}")
