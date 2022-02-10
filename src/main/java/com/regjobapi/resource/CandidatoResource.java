@@ -1,8 +1,16 @@
 package com.regjobapi.resource;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -45,6 +53,9 @@ public class CandidatoResource {
 	@Autowired
 	private S3 s3;
 	
+	@Autowired
+	private ServletContext servletContext;
+	
 	@PostMapping
 	@RequestMapping("/cadastrar")
 	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO')  and hasAuthority('SCOPE_write')")
@@ -63,14 +74,30 @@ public class CandidatoResource {
 	@RequestMapping("/listar")
 	public List<Candidato> listar() {
 		return service.listar();
-	}
+	} 
 	
 	@PostMapping("/anexo")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and #oauth2.hasScope('read','write')")
-	public Anexo uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
-		String nome = s3.salvarTemporariamente(anexo);
-		return new Anexo(nome, s3.configurarUrl(nome));
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and hasAuthority('SCOPE_write')")
+	public String uploadAnexo( @RequestParam("file")  MultipartFile anexo, String response ) throws IOException {
+		
+		if (anexo != null && !anexo.isEmpty()) {
+	        
+	    	OutputStream out = new FileOutputStream("/Users/Edivaldo/Documents/anexo--" + anexo.getOriginalFilename()); 
+			out.write(anexo.getBytes());
+			out.close();
+	    }
+		return response;
 	}
 	
+	@GetMapping("/anexo/files")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and hasAuthority('SCOPE_write')")
+	public List<String> preenchelista() {
+        String[] nomes;
+        File diretorio = new File("/Users/Edivaldo/Documents/");
+        nomes = diretorio.list(); //lista os arquivos
+        List<String> lista = Arrays.asList(nomes); //passo de Array para List
+        Collections.sort(lista); //ordeno a lista
+        return lista;
+    }
 
 }
