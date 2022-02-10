@@ -47,13 +47,13 @@ public class CandidatoResource {
 	
 	@PostMapping
 	@RequestMapping("/cadastrar")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and #oauth2.hasScope('write')")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO')  and hasAuthority('SCOPE_write')")
 	public ResponseEntity<Candidato> criar(@Valid @RequestBody Candidato candidato, HttpServletResponse response){
 	
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, candidato.getId()));	
-		if (StringUtils.hasText(candidato.getAnexo())) {
+		/*if (StringUtils.hasText(candidato.getAnexo())) {
 			s3.salvar(candidato.getAnexo());
-		}
+		}*/
 		Candidato candidatoSalvo = repository.save(candidato);
 		return ResponseEntity.status(HttpStatus.CREATED).body(candidatoSalvo);
 		
@@ -66,7 +66,7 @@ public class CandidatoResource {
 	}
 	
 	@PostMapping("/anexo")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and #oauth2.hasScope('write')")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and #oauth2.hasScope('read','write')")
 	public Anexo uploadAnexo(@RequestParam MultipartFile anexo) throws IOException {
 		String nome = s3.salvarTemporariamente(anexo);
 		return new Anexo(nome, s3.configurarUrl(nome));
