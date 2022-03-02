@@ -1,5 +1,10 @@
 package com.regjobapi.dto;
 
+
+
+import lombok.Data;
+
+@Data
 public class Anexo {
 	
 	private String nome;

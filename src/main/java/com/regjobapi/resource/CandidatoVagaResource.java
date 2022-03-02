@@ -33,7 +33,7 @@ public class CandidatoVagaResource {
 	
 	@PostMapping
 	@RequestMapping("/cadastrar")
-	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO') and #oauth2.hasScope('write')")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_CANDIDATO')  and hasAuthority('SCOPE_write')")	
 	public ResponseEntity<CandidatoVaga> criar(@Valid @RequestBody CandidatoVaga candidatoVaga, HttpServletResponse response){
 		CandidatoVaga candidatoVagaSalvo = repository.save(candidatoVaga);
 		return ResponseEntity.status(HttpStatus.CREATED).body(candidatoVagaSalvo);
