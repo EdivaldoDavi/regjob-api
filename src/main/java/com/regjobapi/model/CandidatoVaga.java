@@ -31,6 +31,8 @@ public class CandidatoVaga {
 	@JoinColumn(name = "cv_vaga_id")
 	private Vaga vaga;
 	
+	private double vagaSalario;
+	
 	
 	
 	
