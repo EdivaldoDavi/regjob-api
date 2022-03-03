@@ -26,7 +26,7 @@ public class Vaga {
 	
 	private TipoVagaEnum  tipo;
 	
-	private Double salario;
+
 
 	
 
