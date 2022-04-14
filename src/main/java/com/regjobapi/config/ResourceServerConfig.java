@@ -61,8 +61,8 @@ public class ResourceServerConfig {
 		    				);
 		    			}
 		    		);        
-      //  return http.formLogin(Customizer.withDefaults()).build();
-          return http.formLogin(c -> c.loginPage("/login").permitAll()).build(); 
+   //     return http.formLogin(Customizer.withDefaults()).build();
+         return http.formLogin(c -> c.loginPage("/login").permitAll()).build(); 
     }
 
     @Bean

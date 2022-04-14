@@ -82,8 +82,8 @@ public class AuthServerConfig {
                 .redirectUris(uris -> uris.addAll(regjobApiProperty.getSeguranca().getRedirectsPermitidos()))
                 .scope("read")
                 .tokenSettings(TokenSettings.builder()
-                        .accessTokenTimeToLive(Duration.ofMinutes(30))
-                        .refreshTokenTimeToLive(Duration.ofDays(24))
+                        .accessTokenTimeToLive(Duration.ofMinutes(1))
+                        .refreshTokenTimeToLive(Duration.ofMinutes(1))
                         .build())
                 .clientSettings(ClientSettings.builder()
                         .requireAuthorizationConsent(false)
@@ -117,7 +117,7 @@ public class AuthServerConfig {
             for (GrantedAuthority grantedAuthority : usuarioSistema.getAuthorities()) {
                 authorities.add(grantedAuthority.getAuthority());
             }
-
+            context.getClaims().claim("id", usuarioSistema.getUsuario().getCodigo());
             context.getClaims().claim("nome", usuarioSistema.getUsuario().getNome());
             context.getClaims().claim("authorities", authorities);
         };
